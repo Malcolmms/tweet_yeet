@@ -2,12 +2,29 @@
 from datetime import datetime, timedelta
 import tweepy
 
-# options
-delete_tweets = True
-deletes_favs = False
-censor= True
-days_to_keep = 7
-censor_word = "word"
+
+# sets options from command line using input functions
+delete_tweets = input("would you like to delete tweets before a certain date? (Y/N)")
+if delete_tweets.lower == "y":
+    delete_tweets = True 
+else: 
+    delete_tweets = False
+
+delete_favs = input("would you like to delete favorites before a certain date? (Y/N)")
+if delete_favs.lower == "y":
+    delete_favs = True 
+else: 
+    delete_favs = False
+
+censor= input("Would you like to censor a certain word from tweets and favorites? (Y/N)")
+if censor.lower == "y":
+    censor = True 
+else: 
+    censor = False
+
+# sets time limit 
+if delete_tweets or delete_favs == True:
+    days_to_keep = input("Input the number of days of tweets you would like to keep as a numeral (0, 7, 249 etc.). Tweets/favs older than this will be deleted ")
 
 # api info
 consumer_key = 'XXXXXXXX'
@@ -44,6 +61,7 @@ if delete_favs:
 if censor:
     favorites = tweepy.Cursor(api.favorites).items()
     timeline = tweepy.Cursor(api.user_timeline).items()
+    censor_word = input("Input the word you would like to censor here and hit enter: ")
     for favorite in favorites:
         if censor_word in favorite:
             api.destroy_status(favorite.id)
